@@ -58,6 +58,8 @@ Nesta jornada prática, o fluxo de trabalho consistiu em:
     GROUP BY md.channel
     ORDER BY avg_historico DESC;
 
+  ![Resultado da Média de Histórico](avg_historico.png)
+
 ### 5. Filtrando conversões apenas para canais específicos (`Web` e `Phone`)
 * **Conceito aplicado:** Uso do operador `IN` para múltiplos valores textuais.
 
@@ -89,6 +91,8 @@ Nesta jornada prática, o fluxo de trabalho consistiu em:
     FROM marketing_data md 
     GROUP BY md.offer 
     ORDER BY total_registros DESC;
+
+![Visão Geral das Consultas no DBeaver](select%20all.png)
 
 ---
 
