@@ -16,84 +16,131 @@ Nesta jornada prática, o fluxo de trabalho consistiu em:
 
 ## 💻 Consultas e Casos de Negócio Resolvidos
 
-### 1. Qual canal de marketing gerou o maior volume total de conversões?
-* **Conceito aplicado:** Agrupamento básico (`GROUP BY`) e ordenação decrescente (`ORDER BY DESC`).
+-- 1. Visualizando as primeiras linhas com limite
+SELECT channel, offer 
+FROM marketing_data md 
+LIMIT 10;
 
-    SELECT 
-        md.channel,
-        SUM(conversion) AS total_conversoes
-    FROM marketing_data md
-    GROUP BY md.channel
-    ORDER BY total_conversoes DESC;
+-- 2. Filtrando dados textuais específicos
+SELECT *
+FROM marketing_data md
+WHERE md.zip_code = 'Urban';
 
-### 2. Desempenho por canal considerando apenas clientes que usaram BOGO (`used_bogo`)
-* **Conceito aplicado:** Filtragem de linhas com `WHERE`.
+-- 3. Filtrando valores numéricos e ordenação ascendente
+SELECT history 
+FROM marketing_data md
+WHERE history > 500
+ORDER BY history ASC;
 
-    SELECT 
-        md.channel,
-        SUM(conversion) AS total_conversoes
-    FROM marketing_data md 
-    WHERE used_bogo = 1
-    GROUP BY channel
-    ORDER BY total_conversoes DESC;
+-- 4. Múltiplas condições lógicas (E / AND)
+SELECT channel, conversion 
+FROM marketing_data md
+WHERE channel = 'Web' AND conversion = 1;
 
-### 3. Campanhas impactadas por duas estratégias simultâneas (BOGO + Desconto)
-* **Conceito aplicado:** Múltiplas condições lógicas utilizando o operador `AND`.
+-- 5. Condições alternativas (OU / OR)
+SELECT channel, offer, history 
+FROM marketing_data md
+WHERE offer = 'Discount' OR offer = 'Buy One Get One'
+ORDER BY offer;
 
-    SELECT 
-        md.channel,
-        SUM(conversion) AS total_conversoes
-    FROM marketing_data md 
-    WHERE used_bogo = 1 AND used_discount = 1
-    GROUP BY channel 
-    ORDER BY total_conversoes DESC;
+-- 6. Filtrando faixas numéricas com intervalo (BETWEEN)
+SELECT history 
+FROM marketing_data md
+WHERE md.history BETWEEN 100 AND 200
+ORDER BY md.history DESC;
 
-### 4. Qual o histórico médio de compras por canal (com arredondamento)?
-* **Conceito aplicado:** Cálculo de média (`AVG`), arredondamento (`ROUND`) e conversão explícita de tipo de dados (`::numeric`).
+-- 7. Encontrando o teto de uma métrica (MAX)
+SELECT MAX(md.history) AS maior_historico 
+FROM marketing_data md;
 
-    SELECT 
-        md.channel,
-        ROUND(AVG(history)::numeric, 2) AS avg_historico
-    FROM marketing_data md
-    GROUP BY md.channel
-    ORDER BY avg_historico DESC;
+-- 8. Canal de marketing com maior volume total de conversões
+SELECT 
+    md.channel,
+    SUM(conversion) AS total_conversoes
+FROM marketing_data md
+GROUP BY md.channel
+ORDER BY total_conversoes DESC;
 
-  ![Resultado da Média de Histórico](avg_historico.png)
+-- 9. Desempenho por canal considerando campanhas BOGO (used_bogo)
+SELECT 
+    md.channel,
+    SUM(conversion) AS total_conversoes
+FROM marketing_data md 
+WHERE used_bogo = 1
+GROUP BY channel
+ORDER BY total_conversoes DESC;
 
-### 5. Filtrando conversões apenas para canais específicos (`Web` e `Phone`)
-* **Conceito aplicado:** Uso do operador `IN` para múltiplos valores textuais.
+-- 10. Campanhas com estratégias combinadas (BOGO + Desconto)
+SELECT 
+    md.channel,
+    SUM(conversion) AS total_conversoes
+FROM marketing_data md 
+WHERE used_bogo = 1 AND used_discount = 1
+GROUP BY channel 
+ORDER BY total_conversoes DESC;
 
-    SELECT 
-        md.channel,
-        SUM(conversion) AS total_conversion
-    FROM marketing_data md
-    WHERE channel IN ('Web', 'Phone')
-    GROUP BY md.channel 
-    ORDER BY total_conversion DESC;
+-- 11. Histórico médio de compras por canal (com arredondamento)
+SELECT 
+    md.channel,
+    ROUND(AVG(history)::numeric, 2) AS avg_historico
+FROM marketing_data md
+GROUP BY md.channel
+ORDER BY avg_historico DESC;
 
-### 6. Filtrando dados pós-agrupamento (Canais com mais de 1000 conversões)
-* **Conceito aplicado:** Uso do `HAVING` para filtrar resultados agregados.
+-- 12. Filtragem avançada com múltiplos valores (IN)
+SELECT 
+    md.channel,
+    SUM(conversion) AS total_conversion
+FROM marketing_data md
+WHERE channel IN ('Web', 'Phone')
+GROUP BY md.channel 
+ORDER BY total_conversion DESC;
 
-    SELECT 
-        md.channel,
-        SUM(conversion) AS conversoes1k
-    FROM marketing_data md
-    GROUP BY md.channel 
-    HAVING SUM(conversion) > 1000
-    ORDER BY conversoes1k DESC;
+-- 13. Relatório Gerencial Completo por Canal (Múltiplas Agregações)
+SELECT 
+    md.channel,
+    COUNT(*) AS total_linhas,
+    SUM(conversion) AS total_conversoes,
+    ROUND(AVG(history)::numeric, 2) AS media_historico
+FROM marketing_data md
+GROUP BY md.channel
+ORDER BY total_conversoes DESC;
 
-### 7. Contagem de registros por tipo de oferta (`offer`)
-* **Conceito aplicado:** Utilização da função de contagem (`COUNT`).
+-- 14. Filtrando dados pós-agrupamento (HAVING)
+SELECT 
+    md.offer,
+    ROUND(AVG(history)::numeric, 2) AS media_historico
+FROM marketing_data md
+GROUP BY md.offer
+HAVING ROUND(AVG(history)::numeric, 2) > 1
+ORDER BY media_historico;
 
-    SELECT 
-        md.offer,
-        COUNT(offer) AS total_registros
-    FROM marketing_data md 
-    GROUP BY md.offer 
-    ORDER BY total_registros DESC;
+-- 15. Contagem de clientes convertidos por zona postal (zip_code)
+SELECT 
+    md.zip_code,
+    COUNT(*) AS total_clientes
+FROM marketing_data md
+WHERE md.conversion = 1
+GROUP BY md.zip_code
+ORDER BY total_clientes DESC;
 
-![Visão Geral das Consultas no DBeaver](select%20all.png)
+-- 16. Agrupamento Duplo (Cruzamento de Canal e Oferta)
+SELECT 
+    channel, 
+    offer,
+    SUM(conversion) AS total_conversoes
+FROM marketing_data md
+GROUP BY md.channel, md.offer
+ORDER BY total_conversoes DESC;
 
+-- 17. Filtrando indicações e canais específicos com limite
+SELECT 
+    channel, 
+    history, 
+    is_referral 
+FROM marketing_data md
+WHERE md.is_referral = 1 AND md.channel = 'Phone'
+LIMIT 15;
 ---
 
 ## 🛠️ Tecnologias e Ferramentas Utilizadas
