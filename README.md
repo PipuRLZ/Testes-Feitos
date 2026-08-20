@@ -1,4 +1,4 @@
-Projeto Prático: Análise de Campanhas de Marketing com SQL
+# 📊 Projeto Prático: Análise de Campanhas de Marketing com SQL
 
 Este repositório documenta uma sessão intensiva de desenvolvimento prático em **SQL**, utilizando uma base de dados de marketing com mais de **64 mil linhas**. 
 
@@ -6,7 +6,8 @@ O projeto simula um ambiente real de análise de dados, cobrindo desde consultas
 
 ---
 
-Contexto e Metodologia
+## 🎯 Contexto e Metodologia
+
 O fluxo de trabalho deste portfólio abrange:
 1. **Fundamentos de Consulta:** Extração cirúrgica de dados com `SELECT`, filtros condicionais (`WHERE`, `BETWEEN`, `IN`) e ordenação (`ORDER BY`).
 2. **Agregações e Métricas:** Uso de funções estatísticas (`SUM`, `AVG`, `COUNT`, `MAX`) combinadas com o agrupamento de dados (`GROUP BY`).
@@ -15,7 +16,7 @@ O fluxo de trabalho deste portfólio abrange:
 
 ---
 
-Consultas e Casos de Negócio Resolvidos
+## 💻 Consultas e Casos de Negócio Resolvidos
 
 ### 1. Visualizando as primeiras linhas com limite
 * **Conceito aplicado:** Projeção de colunas específicas e controle de exibição com `LIMIT`.
