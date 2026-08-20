@@ -26,52 +26,92 @@ SELECT channel, offer
 FROM marketing_data md 
 LIMIT 10;
 ```
-2. Filtrando dados textuais específicos
-Conceito aplicado: Filtragem exata de strings usando WHERE.
+
+![Resultado Consulta 1](113356.png)
+
+---
+
+### 2. Filtrando dados textuais específicos
+* **Conceito aplicado:** Filtragem exata de strings usando `WHERE`.
+
 ```sql
 SELECT *
 FROM marketing_data md
 WHERE md.zip_code = 'Urban';
 ```
-3. Filtrando valores numéricos e ordenação ascendente
-Conceito aplicado: Operadores de comparação (>) combinados com ORDER BY ASC.
+
+![Resultado Consulta 2](113526.png)
+
+---
+
+### 3. Filtrando valores numéricos e ordenação ascendente
+* **Conceito aplicado:** Operadores de comparação (`>`) combinados com `ORDER BY ASC`.
+
 ```sql
 SELECT history 
 FROM marketing_data md
 WHERE history > 500
 ORDER BY history ASC;
 ```
-4. Múltiplas condições lógicas (E / AND)
-Conceito aplicado: Cruzamento de condições textuais e numéricas com AND.
+
+![Resultado Consulta 3](113722.png)
+
+---
+
+### 4. Múltiplas condições lógicas (E / AND)
+* **Conceito aplicado:** Cruzamento de condições textuais e numéricas com `AND`.
+
 ```sql
 SELECT channel, conversion 
 FROM marketing_data md
 WHERE channel = 'Web' AND conversion = 1;
 ```
-5. Condições alternativas (OU / OR)
-Conceito aplicado: Uso do operador lógico OR para múltiplas opções de texto.
+
+![Resultado Consulta 4](113939.png)
+
+---
+
+### 5. Condições alternativas (OU / OR)
+* **Conceito aplicado:** Uso do operador lógico `OR` para múltiplas opções de texto.
+
 ```sql
 SELECT channel, offer, history 
 FROM marketing_data md
 WHERE offer = 'Discount' OR offer = 'Buy One Get One'
 ORDER BY offer;
 ```
-6. Filtrando faixas numéricas com intervalo (BETWEEN)
-Conceito aplicado: Seleção de registros dentro de um intervalo com BETWEEN e ordenação decrescente.
+
+![Resultado Consulta 5](114145.png)
+
+---
+
+### 6. Filtrando por recência recente (`recency < 4`)
+* **Conceito aplicado:** Operadores de comparação numérica (`<`) e ordenação ascendente.
+
 ```sql
-SELECT history 
+SELECT * 
 FROM marketing_data md
-WHERE md.history BETWEEN 100 AND 200
-ORDER BY md.history DESC;
+WHERE md.recency < 4
+ORDER BY md.recency ASC;
 ```
-7. Encontrando o teto de uma métrica (MAX)
-Conceito aplicado: Função de agregação para encontrar o valor máximo da base.
+
+![Resultado Consulta 6](114337.png)
+
+---
+
+### 7. Encontrando o teto de uma métrica (`MAX`)
+* **Conceito aplicado:** Função de agregação para encontrar o valor máximo da base.
+
 ```sql
 SELECT MAX(md.history) AS maior_historico 
 FROM marketing_data md;
 ```
-8. Canal de marketing com maior volume total de conversões
-Conceito aplicado: Agrupamento básico (GROUP BY) e soma (SUM).
+
+---
+
+### 8. Canal de marketing com maior volume total de conversões
+* **Conceito aplicado:** Agrupamento básico (`GROUP BY`) e soma (`SUM`).
+
 ```sql
 SELECT 
     md.channel,
@@ -80,8 +120,12 @@ FROM marketing_data md
 GROUP BY md.channel
 ORDER BY total_conversoes DESC;
 ```
-9. Desempenho por canal considerando campanhas BOGO (used_bogo)
-Conceito aplicado: Filtro de linha pré-agrupamento.
+
+---
+
+### 9. Desempenho por canal considerando campanhas BOGO (`used_bogo`)
+* **Conceito aplicado:** Filtro de linha pré-agrupamento.
+
 ```sql
 SELECT 
     md.channel,
@@ -91,8 +135,12 @@ WHERE used_bogo = 1
 GROUP BY channel
 ORDER BY total_conversoes DESC;
 ```
-10. Campanhas com estratégias combinadas (BOGO + Desconto)
-Conceito aplicado: Múltiplas restrições lógicas com AND e agregações.
+
+---
+
+### 10. Campanhas com estratégias combinadas (BOGO + Desconto)
+* **Conceito aplicado:** Múltiplas restrições lógicas com `AND` e agregações.
+
 ```sql
 SELECT 
     md.channel,
@@ -102,8 +150,12 @@ WHERE used_bogo = 1 AND used_discount = 1
 GROUP BY channel 
 ORDER BY total_conversoes DESC;
 ```
-11. Histórico médio de compras por canal (com arredondamento)
-Conceito aplicado: Cálculo de média (AVG), arredondamento (ROUND) e conversão de tipo (::numeric).
+
+---
+
+### 11. Histórico médio de compras por canal (com arredondamento)
+* **Conceito aplicado:** Cálculo de média (`AVG`), arredondamento (`ROUND`) e conversão de tipo (`::numeric`).
+
 ```sql
 SELECT 
     md.channel,
@@ -112,8 +164,14 @@ FROM marketing_data md
 GROUP BY md.channel
 ORDER BY avg_historico DESC;
 ```
-12. Filtragem avançada com múltiplos valores (IN)
-Conceito aplicado: Seleção de múltiplos subconjuntos textuais com o operador IN.
+
+![Média Histórica por Canal](avg_historico.png)
+
+---
+
+### 12. Filtragem avançada com múltiplos valores (`IN`)
+* **Conceito aplicado:** Seleção de múltiplos subconjuntos textuais com o operador `IN`.
+
 ```sql
 SELECT 
     md.channel,
@@ -123,8 +181,12 @@ WHERE channel IN ('Web', 'Phone')
 GROUP BY md.channel 
 ORDER BY total_conversion DESC;
 ```
-13. Relatório Gerencial Completo por Canal (Múltiplas Agregações)
-Conceito aplicado: Uso simultâneo de COUNT(*), SUM, AVG e ROUND por grupo.
+
+---
+
+### 13. Relatório Gerencial Completo por Canal (Múltiplas Agregações)
+* **Conceito aplicado:** Uso simultâneo de `COUNT(*)`, `SUM`, `AVG` e `ROUND` por grupo.
+
 ```sql
 SELECT 
     md.channel,
@@ -135,19 +197,31 @@ FROM marketing_data md
 GROUP BY md.channel
 ORDER BY total_conversoes DESC;
 ```
-14. Filtrando dados pós-agrupamento (HAVING)
-Conceito aplicado: Uso do HAVING para aplicar regras em cima de valores agregados.
+
+![Relatório Gerencial por Canal](115045.png)
+
+---
+
+### 14. Filtrando dados pós-agrupamento (`HAVING`)
+* **Conceito aplicado:** Uso do `HAVING` para aplicar regras em cima de valores agregados.
+
 ```sql
 SELECT 
     md.offer,
     ROUND(AVG(history)::numeric, 2) AS media_historico
 FROM marketing_data md
 GROUP BY md.offer
-HAVING ROUND(AVG(history)::numeric, 2) > 1
+HAVING ROUND(AVG(history)::numeric, 2) > 350
 ORDER BY media_historico;
 ```
-15. Contagem de clientes convertidos por zona postal (zip_code)
-Conceito aplicado: Filtro WHERE combinado com contagem agrupada.
+
+![Teste do Having sem resultado](120042.png)
+
+---
+
+### 15. Contagem de clientes convertidos por zona postal (`zip_code`)
+* **Conceito applied:** Filtro `WHERE` combinado com contagem agrupada.
+
 ```sql
 SELECT 
     md.zip_code,
@@ -157,8 +231,14 @@ WHERE md.conversion = 1
 GROUP BY md.zip_code
 ORDER BY total_clientes DESC;
 ```
-16. Agrupamento Duplo (Cruzamento de Canal e Oferta)
-Conceito aplicado: Agrupamento por duas colunas simultaneamente no GROUP BY.
+
+![Contagem por Zona Postal](115530.png)
+
+---
+
+### 16. Agrupamento Duplo (Cruzamento de Canal e Oferta)
+* **Conceito aplicado:** Agrupamento por duas colunas simultaneamente no `GROUP BY`.
+
 ```sql
 SELECT 
     channel, 
@@ -168,8 +248,12 @@ FROM marketing_data md
 GROUP BY md.channel, md.offer
 ORDER BY total_conversoes DESC;
 ```
-17. Filtrando indicações e canais específicos com limite
-Conceito aplicado: Condições restritivas e paginação de dados.
+
+---
+
+### 17. Filtrando indicações e canais específicos com limite
+* **Conceito aplicado:** Condições restritivas e paginação de dados.
+
 ```sql
 SELECT 
     channel, 
@@ -179,14 +263,16 @@ FROM marketing_data md
 WHERE md.is_referral = 1 AND md.channel = 'Phone'
 LIMIT 15;
 ```
-🛠️ Tecnologias e Ferramentas Utilizadas
-Banco de Dados: PostgreSQL
 
-Ferramenta de Gestão: DBeaver
+---
 
-Linguagem: SQL
+## 🛠️ Tecnologias e Ferramentas Utilizadas
 
-Visão geral do ambiente de desenvolvimento e consultas estruturadas:
+* **Banco de Dados:** PostgreSQL
+* **Ferramenta de Gestão:** DBeaver
+* **Linguagem:** SQL
 
+---
 
-
+*Visão geral do ambiente de desenvolvimento e consultas estruturadas:*
+![Visão Geral DBeaver](select%20all.png)
