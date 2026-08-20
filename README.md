@@ -1,4 +1,4 @@
-# 📊 Projeto Prático: Análise de Campanhas de Marketing com SQL
+Projeto Prático: Análise de Campanhas de Marketing com SQL
 
 Este repositório documenta uma sessão intensiva de desenvolvimento prático em **SQL**, utilizando uma base de dados de marketing com mais de **64 mil linhas**. 
 
@@ -19,6 +19,7 @@ Consultas e Casos de Negócio Resolvidos
 
 ### 1. Visualizando as primeiras linhas com limite
 * **Conceito aplicado:** Projeção de colunas específicas e controle de exibição com `LIMIT`.
+
 ```sql
 SELECT channel, offer 
 FROM marketing_data md 
@@ -185,4 +186,6 @@ Ferramenta de Gestão: DBeaver
 Linguagem: SQL
 
 Visão geral do ambiente de desenvolvimento e consultas estruturadas:
+
+
 
